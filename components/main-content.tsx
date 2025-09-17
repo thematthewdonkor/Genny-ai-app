@@ -1,7 +1,14 @@
+"use client";
+
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
+import { useChatStore } from "@/store/useChatStore";
+import { ChatItem } from "@/types";
+import { useCallback, useState } from "react";
+
+import axios from "axios";
 
 import {
   PenTool,
@@ -43,6 +50,62 @@ const actionCards = [
 ];
 
 export const MainContent = () => {
+  const { addChatItem, setAssistantLoading, chatItems } = useChatStore();
+  const [prompt, setPrompt] = useState<string>("");
+
+  console.log(chatItems);
+
+  //Function to send message to the llm
+  const handleSendMessage = useCallback(
+    async (message: string) => {
+      if (!message.trim()) return;
+
+      const userMessage: ChatItem = {
+        role: "user",
+        content: message.trim(),
+      };
+
+      try {
+        setAssistantLoading(true);
+        addChatItem(userMessage);
+
+        const response = await axios.post(
+          "/api/chat",
+          {
+            messages: [...chatItems, userMessage],
+          },
+          { headers: { "Content-type": "application/json" } }
+        );
+
+        const assistantMessage: ChatItem = {
+          role: "assistant",
+          content: response.data.assistantText,
+        };
+
+        addChatItem(assistantMessage);
+        setAssistantLoading(false);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setAssistantLoading(false);
+      }
+    },
+    [addChatItem, setAssistantLoading, chatItems]
+  );
+
+  //Press "Enter" key to send message and "Shift + Enter" key for a new line
+  const handleKeyDown = useCallback(
+    async (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+
+        handleSendMessage(prompt);
+        setPrompt("");
+      }
+    },
+    [handleSendMessage, prompt]
+  );
+
   return (
     <div className="bg-white border rounded-tl-4xl px-8 h-screen">
       <div className="space-y-8 container mx-auto py-12 flex h-screen flex-col">
@@ -90,6 +153,7 @@ export const MainContent = () => {
           </div>
         </div>
 
+        {/* Input field */}
         <div className="mt-12">
           <Card
             className="rounded-2xl border bg-white 
@@ -100,9 +164,17 @@ export const MainContent = () => {
               <Input
                 placeholder="Ask anything"
                 className="flex-1 p-4 border-none rounded-full text-lg placeholder:text-gray-500 focus-visible:ring-0 shadow-none"
+                value={prompt}
+                onChange={(event) => setPrompt(event.target.value)}
+                onKeyDown={handleKeyDown}
               />
 
-              <Button variant="ghost" size="sm" className="rounded-full">
+              <Button
+                onClick={() => handleSendMessage(prompt)}
+                variant="ghost"
+                size="sm"
+                className="rounded-full"
+              >
                 <Send className="w-4 h-4" />
               </Button>
             </div>

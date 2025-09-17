@@ -1,12 +1,23 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import Groq from "groq-sdk";
+import { NextRequest } from "next/server";
 
-// This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest) {
-  return NextResponse.redirect(new URL("/home", request.url));
-}
+export const POST = async (request: NextRequest) => {
+  try {
+    const { messages } = await request.json();
 
-// See "Matching Paths" below to learn more
-export const config = {
-  matcher: "/about/:path*",
+    const client = new Groq({
+      apiKey: process.env.GROP_API_KEY!,
+    });
+
+    const response = await client.chat.completions.create({
+      model: "openai/gpt-oss-20b",
+      messages,
+    });
+
+    const assistantText = response.choices?.[0].message?.content || "";
+
+    return new Response(JSON.stringify({ assistantText }));
+  } catch (error) {
+    console.log(error);
+  }
 };
