@@ -1,12 +1,16 @@
+"use client";
+
 import { Assistant } from "@/components/assistant";
 import { Input } from "@/components/input";
 import { Welcome } from "@/components/welcome";
 import { useChatStore } from "@/store/useChatStore";
 import { ChatItem } from "@/types";
 import axios from "axios";
-useChatStore
+
 const ChatPage = () => {
-  const { addChatItem, setAssistantLoading, chatItems } = ();
+  const { addChatItem, setAssistantLoading, chatItems } = useChatStore();
+
+  const hasStartedChat = chatItems.length > 0;
 
   const handleSendMessage = async (message: string) => {
     if (!message.trim()) return;
@@ -44,9 +48,13 @@ const ChatPage = () => {
 
   return (
     <div>
-      <Welcome />
-      <Assistant />
-      <Input onSendMessage={handleSendMessage} />
+      <div className="bg-white border rounded-tl-4xl px-8 h-screen">
+        <div className="space-y-8 container mx-auto py-12 flex h-screen flex-col">
+          {hasStartedChat ? <Assistant items={chatItems} /> : <Welcome />}
+
+          <Input onSendMessage={handleSendMessage} />
+        </div>
+      </div>
     </div>
   );
 };
