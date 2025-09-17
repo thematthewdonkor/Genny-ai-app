@@ -1,6 +1,6 @@
 import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
-import { MainContent } from "@/components/main-content";
+import ChatPage from "./chat/page";
 
 const HomePage = () => {
   return (
@@ -8,7 +8,7 @@ const HomePage = () => {
       <Sidebar />
       <main className="flex-1 space-y-4 overflow-auto">
         <Navbar />
-        <MainContent />
+        <ChatPage />
       </main>
     </div>
   );
