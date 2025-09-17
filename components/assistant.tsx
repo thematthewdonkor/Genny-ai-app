@@ -5,5 +5,5 @@ interface AssistantProps {
 }
 
 export const Assistant = ({ items }: AssistantProps) => {
-  return <div>Assistant</div>;
+  return <div>{items.map(() => <Markdown></Markdown>)}</div>;
 };
