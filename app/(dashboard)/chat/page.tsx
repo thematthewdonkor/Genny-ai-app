@@ -2,14 +2,13 @@
 
 import { Assistant } from "@/components/assistant";
 import { Input } from "@/components/input";
-import { Welcome } from "@/components/welcome";
+import { Heading } from "@/components/heading";
 import { useChatStore } from "@/store/useChatStore";
 import { ChatItem } from "@/types";
 import axios from "axios";
 
 const ChatPage = () => {
   const { addChatItem, setAssistantLoading, chatItems } = useChatStore();
-
   const hasStartedChat = chatItems.length > 0;
 
   const handleSendMessage = async (message: string) => {
@@ -47,14 +46,9 @@ const ChatPage = () => {
   };
 
   return (
-    <div>
-      <div className="bg-white border rounded-tl-4xl px-8 h-screen">
-        <div className="space-y-8 container mx-auto py-12 flex h-screen flex-col">
-          {hasStartedChat ? <Assistant items={chatItems} /> : <Welcome />}
-
-          <Input onSendMessage={handleSendMessage} />
-        </div>
-      </div>
+    <div className="p-4 md:p-6 h-full">
+      {hasStartedChat ? <Assistant items={chatItems} /> : <Heading />}
+      <Input onSendMessage={handleSendMessage} />
     </div>
   );
 };

@@ -4,9 +4,9 @@ import ChatPage from "./chat/page";
 
 const HomePage = () => {
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex">
       <Sidebar />
-      <main className="flex-1 space-y-4 overflow-auto">
+      <main className="flex-1">
         <Navbar />
         <ChatPage />
       </main>

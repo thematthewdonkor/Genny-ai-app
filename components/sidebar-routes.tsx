@@ -7,52 +7,37 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
-
+import { Tooltip, TooltipTrigger, TooltipContent } from "./ui/tooltip";
 import {
   Search,
   MessageSquarePlus,
-  Folder,
-  FileText,
-  FileStack,
-  Users,
-  History,
-  Settings,
-  HelpCircle,
-  Sun,
-  Moon,
-  Plus,
   PanelRight,
+  Music,
+  Video,
+  Code,
+  Image as Images,
 } from "lucide-react";
 
 const routes = [
-  { name: "AI Chat", href: "/chat", icon: MessageSquarePlus },
-  { name: "Projects", href: "/projects", icon: Folder },
-  { name: "Templates", href: "/templates", icon: FileText },
-  { name: "Documents", href: "/documents", icon: FileStack, hasAction: true },
-  { name: "Community", href: "/community", icon: Users, badge: "NEW" },
-  { name: "History", href: "/history", icon: History },
-];
-
-import { Tooltip, TooltipTrigger, TooltipContent } from "./ui/tooltip";
-
-const bottomRoutes = [
-  { name: "Settings", href: "/settings", icon: Settings },
-  { name: "Help", href: "/help", icon: HelpCircle },
+  { name: "AI Chat", href: "", icon: MessageSquarePlus },
+  { name: "Image", href: "/", icon: Images },
+  { name: "Music", href: "/", icon: Music },
+  { name: "Video", href: "/", icon: Video },
+  { name: "Code", href: "", icon: Code, badge: "NEW" },
 ];
 
 export const SidebarRoutes = () => {
   const [activeRoute, setActiveRoute] = useState("AI Chat");
   const [collapsed, setCollapsed] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   return (
     <div
       className={cn(
-        "flex flex-col  px-4 py-4 space-y-4 h-full transition-all",
-        collapsed ? "w-20 bg-transparent" : "w-80"
+        "flex flex-col p-4 space-y-4 transition-all",
+        collapsed ? "w-20" : "w-80"
       )}
     >
-      {/* Logo and panel left icon */}
+      {/* Logo and panel right icon */}
       <div className="flex items-center justify-between">
         {!collapsed && (
           <div className="flex items-center gap-1">
@@ -65,10 +50,9 @@ export const SidebarRoutes = () => {
             />
           </div>
         )}
-
         <Button
           variant="ghost"
-          className="hover:bg-transparent cursor-pointer"
+          className="hover:bg-transparent cursor-pointer hidden md:block"
           onClick={() => setCollapsed(!collapsed)}
         >
           <PanelRight className="w-5 h-5" />
@@ -100,7 +84,7 @@ export const SidebarRoutes = () => {
             <Button
               variant="ghost"
               className={cn(
-                "w-full justify-start mb-2 text-sm gap-3 h-12 px-3 text-gray-600 hover:bg-white rounded-full",
+                "w-full justify-start mb-2 gap-3 h-12 text-gray-600 hover:bg-white rounded-full",
                 route.name == activeRoute && "bg-white text-gray-900",
                 collapsed &&
                   "justify-center px-0 bg-transparent hover:bg-transparent"
@@ -132,86 +116,9 @@ export const SidebarRoutes = () => {
                 {route.badge}
               </Badge>
             )}
-
-            {!collapsed && route.hasAction && (
-              <Button
-                size="icon"
-                variant="outline"
-                className="absolute right-2 bg-white hover:bg-white rounded-full top-1/2 transform -translate-y-1/2 w-8 h-8 text-gray-900"
-              >
-                <Plus className="w-5 h-5" />
-              </Button>
-            )}
           </Link>
         ))}
       </div>
-
-      {/* Bottom routes */}
-      <div className="py-2">
-        {!collapsed && (
-          <div className="text-sm text-gray-500 mb-2 font-medium">
-            Settings & Help
-          </div>
-        )}
-
-        {bottomRoutes.map((route) => (
-          <Link href={route.href} key={route.name}>
-            <Button
-              variant="ghost"
-              className={cn(
-                "w-full justify-start text-sm gap-3 h-12 px-3 mb-2 rounded-full text-gray-600 hover:bg-white",
-                route.name == activeRoute && "bg-white  text-gray-900",
-                collapsed && "justify-center px-0"
-              )}
-              onClick={() => setActiveRoute(route.name)}
-            >
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span>
-                    <route.icon
-                      className={cn(
-                        "w-5 h-5",
-                        route.name === activeRoute && "fill-blue-600 stroke-1"
-                      )}
-                    />
-                  </span>
-                </TooltipTrigger>
-                {collapsed && (
-                  <TooltipContent side="right">{route.name}</TooltipContent>
-                )}
-              </Tooltip>
-              {!collapsed && route.name}
-            </Button>
-          </Link>
-        ))}
-      </div>
-
-      {/* Toggle theme */}
-      {!collapsed && (
-        <div className="flex rounded-full border p-1 bg-gray-100">
-          <Button
-            className={cn(
-              "flex-1 gap-2 rounded-full text-black hover:bg-white",
-              theme == "light" ? "bg-white" : "bg-transparent"
-            )}
-            onClick={() => setTheme("light")}
-          >
-            <Sun className="w-4 h-4" />
-            Light
-          </Button>
-
-          <Button
-            className={cn(
-              "flex-1 gap-2 rounded-full text-black hover:bg-white",
-              theme == "dark" ? "bg-white" : "bg-transparent"
-            )}
-            onClick={() => setTheme("dark")}
-          >
-            <Moon className="w-4 h-4" />
-            Dark
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
