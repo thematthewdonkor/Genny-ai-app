@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Script",
+  title: "Genny",
   description: "AI Chatbot - that writes text, generates image and code",
 };
 

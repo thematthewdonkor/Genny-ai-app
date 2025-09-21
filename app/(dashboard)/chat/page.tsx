@@ -46,8 +46,10 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="p-4 md:p-6 h-full">
-      {hasStartedChat ? <Assistant items={chatItems} /> : <Heading />}
+    <div className="p-4 md:p-6 h-full flex flex-col">
+      <div className="flex-1">
+        {hasStartedChat ? <Assistant items={chatItems} /> : <Heading />}
+      </div>
       <Input onSendMessage={handleSendMessage} />
     </div>
   );

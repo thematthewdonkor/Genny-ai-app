@@ -8,7 +8,7 @@ const Sidebar = () => {
         <SidebarRoutes />
       </div>
 
-      <div className="p-4 md:hidden">
+      <div className="md:hidden p-4">
         <MobileRoutes />
       </div>
     </div>
