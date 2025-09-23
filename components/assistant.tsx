@@ -3,13 +3,13 @@ import { Markdown } from "./markdown";
 import { cn } from "@/lib/utils";
 
 interface AssistantProps {
-  items: ChatItem[];
+  items?: ChatItem[];
 }
 
 export const Assistant = ({ items }: AssistantProps) => {
   return (
     <div className="w-full flex flex-col  mx-auto p-2 space-y-4">
-      {items.map((item, index) => (
+      {items?.map((item, index) => (
         <div key={index}>
           <div
             className={cn(

@@ -46,11 +46,19 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="p-4 md:p-6 h-full flex flex-col">
+    <div className="flex flex-col h-full">
       <div className="flex-1">
-        {hasStartedChat ? <Assistant items={chatItems} /> : <Heading />}
+        {hasStartedChat ? (
+          <Assistant items={chatItems} />
+        ) : (
+          <Heading
+            title="Start chat with Genny"
+            subtitle="Start conversation with genny, write a script, crack a copyright for your social media posts and more "
+          />
+        )}
       </div>
-      <Input onSendMessage={handleSendMessage} />
+
+      <Input onSendMessage={handleSendMessage} label="Ask anything" />
     </div>
   );
 };

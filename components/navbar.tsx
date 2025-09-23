@@ -8,8 +8,8 @@ const Navbar = () => {
   const { isSignedIn } = useUser();
 
   return (
-    <div className="flex justify-between p-4">
-      <h1 className="md:text-xl text-lg font-bold">AI Chat</h1>
+    <div className="flex justify-between">
+      <h1 className="text-lg md:text-xl font-bold">AI Chat</h1>
 
       {isSignedIn ? (
         <UserButton showName />

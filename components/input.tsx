@@ -7,9 +7,10 @@ import { useCallback, useState } from "react";
 
 interface InputProps {
   onSendMessage: (message: string) => void;
+  label: string;
 }
 
-export const Input = ({ onSendMessage }: InputProps) => {
+export const Input = ({ onSendMessage, label }: InputProps) => {
   const [prompt, setPrompt] = useState<string>("");
 
   const handleKeyDown = useCallback(
@@ -33,7 +34,7 @@ export const Input = ({ onSendMessage }: InputProps) => {
       >
         <div className="flex items-center">
           <Textarea
-            placeholder="Ask anything"
+            placeholder={label}
             className="border-none rounded-full text-lg placeholder:text-gray-500 placeholder:text-lg focus-visible:ring-0 shadow-none resize-none"
             value={prompt}
             onChange={(event) => setPrompt(event.target.value)}
