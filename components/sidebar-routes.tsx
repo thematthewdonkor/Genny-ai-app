@@ -21,7 +21,7 @@ import {
 const routes = [
   { name: "AI Chat", href: "/", icon: MessageSquarePlus },
   { name: "Image", href: "/image", icon: Images },
-  { name: "Music", href: "/", icon: Music },
+  { name: "Music", href: "/music", icon: Music },
   { name: "Video", href: "/", icon: Video },
   { name: "Code", href: "", icon: Code, badge: "NEW" },
 ];

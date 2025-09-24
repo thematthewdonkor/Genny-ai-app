@@ -2,6 +2,10 @@ import Groq from "groq-sdk";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 
+const client = new Groq({
+  apiKey: process.env.GROP_API_KEY!,
+});
+
 export const POST = async (request: NextRequest) => {
   try {
     const { isAuthenticated } = await auth();
@@ -12,10 +16,6 @@ export const POST = async (request: NextRequest) => {
     }
 
     const { messages } = await request.json();
-
-    const client = new Groq({
-      apiKey: process.env.GROP_API_KEY!,
-    });
 
     const response = await client.chat.completions.create({
       model: "openai/gpt-oss-20b",
