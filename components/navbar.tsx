@@ -5,14 +5,14 @@ import { UserButton, SignInButton } from "@clerk/clerk-react";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
 
   return (
     <div className="flex justify-between">
       <h1 className="text-lg md:text-xl font-bold">AI Chat</h1>
 
       {isSignedIn ? (
-        <UserButton showName />
+        <UserButton fallback={user.firstName?.charAt(0)} />
       ) : (
         <SignInButton mode="modal">
           <Button>Get Started</Button>

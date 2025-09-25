@@ -8,24 +8,24 @@ const client = new Groq({
 
 export const POST = async (request: NextRequest) => {
   try {
-    const { isAuthenticated } = await auth();
-
-    // Protect the route by checking if the user is signed in
-    if (!isAuthenticated) {
+    const { userId } = await auth();
+    if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const { messages } = await request.json();
+    if (!messages) {
+      return new NextResponse("Message is required", { status: 400 });
+    }
 
     const response = await client.chat.completions.create({
       model: "openai/gpt-oss-20b",
       messages,
     });
 
-    const assistantText = response.choices?.[0].message?.content || "";
-
-    return new Response(JSON.stringify({ assistantText }));
+    return NextResponse.json(response.choices?.[0].message?.content);
   } catch (error) {
     console.log(error);
+    return new NextResponse("Internal server error", { status: 500 });
   }
 };

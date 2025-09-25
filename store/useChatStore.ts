@@ -1,22 +1,24 @@
 import { create } from "zustand";
-import { ChatItem } from "@/types";
+import { MessageItem, MusicItem } from "@/types";
 
-//Typescript
 interface ChatState {
-  chatItems: ChatItem[];
+  chatItems: MessageItem[];
+  musicItems: MusicItem[];
   assistantLoading: boolean;
 
-  addChatItem: (message: ChatItem) => void;
+  addMusicItem: (message: MusicItem) => void;
+  addChatItem: (message: MessageItem) => void;
   setAssistantLoading: (loading: boolean) => void;
 }
 
-//Function
-export const useChatStore = create<ChatState>((set) => ({
-  chatItems: [], //Initial state
+export const useChatStore = create<ChatState>()((set) => ({
+  chatItems: [],
+  musicItems: [],
   assistantLoading: false,
 
+  addMusicItem: (message) =>
+    set((state) => ({ musicItems: [...state.musicItems, message] })),
   addChatItem: (message) =>
-    set((state) => ({ chatItems: [...state.chatItems, message] })), //State update function
-
+    set((state) => ({ chatItems: [...state.chatItems, message] })),
   setAssistantLoading: (loading) => set({ assistantLoading: loading }),
 }));
