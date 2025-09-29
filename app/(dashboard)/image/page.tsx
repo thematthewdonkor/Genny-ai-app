@@ -2,48 +2,49 @@
 
 import { Heading } from "@/components/heading";
 import { useChatStore } from "@/store/useChatStore";
-import { MusicItem } from "@/types";
+import { ImageItem } from "@/types";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send } from "lucide-react";
+import Image from "next/image";
 import { useCallback, useState } from "react";
 
 import axios from "axios";
 
-const MusicPage = () => {
-  const { musicItems, addMusicItem, setAssistantLoading } = useChatStore();
+const ImagePage = () => {
+  const { imageItems, addImageItem, setAssistantLoading } = useChatStore();
   const [prompt, setPrompt] = useState<string>("");
-  const hasStartedChat = musicItems.length > 0;
+  const hasStartedChat = imageItems.length > 0;
 
   const handleSendMessage = useCallback(
     async (message: string) => {
       if (!message.trim()) return;
 
-      const userMessage: MusicItem = {
-        content: message.trim(),
+      const userMessage: ImageItem = {
+        url: message.trim(),
         type: "prompt",
       };
 
       try {
         setAssistantLoading(true);
-        addMusicItem(userMessage);
+        addImageItem(userMessage);
 
         const response = await axios.post("/api/music", { prompt: message });
 
-        const assistantMessage: MusicItem = {
-          content: response.data.format, //Later explore
-          type: "audio",
+        const assistantMessage: ImageItem = {
+          url: response.data,
+          type: "image",
         };
 
-        addMusicItem(assistantMessage);
+        addImageItem(assistantMessage);
       } catch (error) {
         console.error(error);
       } finally {
         setAssistantLoading(false);
       }
     },
-    [addMusicItem, setAssistantLoading]
+    [addImageItem, setAssistantLoading]
   );
 
   const handleKeyDown = useCallback(
@@ -61,27 +62,29 @@ const MusicPage = () => {
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto space-y-4 p-4">
         {hasStartedChat ? (
-          musicItems.map((item, index) => (
+          imageItems.map((item, index) => (
             <div
               key={index}
               className={`rounded-2xl p-4 leading-relaxed break-words ${
                 item.type === "prompt" ? "border" : "  bg-gray-100"
               }`}
             >
-              {item.type === "audio" ? (
-                <audio controls className="w-full">
-                  <source src={item.content} type="audio/mpeg" />
-                  Your browser does not support the audio element.
-                </audio>
-              ) : (
-                <p>{item.content}</p>
+              {item.type === "image" && (
+                <div className="w-8 h-8">
+                  <Image
+                    src={item.url}
+                    alt="image"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               )}
             </div>
           ))
         ) : (
           <Heading
-            title="🎵 Turn Your Ideas Into Music"
-            subtitle="✨ Describe your vibe, and let Genny compose high-quality tracks tailored for your content."
+            title="🖼️ Generate image with Genny"
+            subtitle="✨ Describe your vibe, and let Genny generate high-quality images tailored for your content."
           />
         )}
       </div>
@@ -94,7 +97,7 @@ const MusicPage = () => {
         >
           <div className="flex items-center">
             <Textarea
-              placeholder="Generate music..."
+              placeholder="Generate image..."
               className="border-none rounded-full text-lg placeholder:text-gray-500 placeholder:text-lg focus-visible:ring-0 shadow-none resize-none"
               value={prompt}
               onChange={(event) => setPrompt(event.target.value)}
@@ -122,4 +125,4 @@ const MusicPage = () => {
   );
 };
 
-export default MusicPage;
+export default ImagePage;

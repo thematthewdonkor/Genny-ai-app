@@ -20,14 +20,14 @@ export const POST = async (request: NextRequest) => {
 
     const input = {
       prompt,
-      audio_format: "mp3",
+      output_format: "jpg",
     };
 
-    const response = await replicate.run("minimax/music-1.5", { input });
+    const response = await replicate.run("google/nano-banana", { input });
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error("Music API error:", error);
+    console.error("Image API error:", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 };
